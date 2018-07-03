@@ -1,0 +1,11 @@
+name: api_mapper
+version: 0.1.0
+
+authors:
+  - Zac Nowicki (z64) <zachnowicki@gmail.com>
+
+description: |
+  Utility for generating JSON-mapped objects directly from API responses
+  for speeding up development of API bindings
+
+license: MIT

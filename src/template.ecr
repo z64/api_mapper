@@ -1,0 +1,8 @@
+struct <%= @klass_name %>
+  include JSON::Serializable
+  <%- @properties.each do |property| -%>
+
+  @[JSON::Field(key: "<%= property.name %>")]
+  property <%= property.name %> : <%= property.type %> # => <%= property.value %>
+  <%- end -%>
+end
