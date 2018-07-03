@@ -27,10 +27,16 @@ module APIMapper
             type = "Int64"
           when :string
             type = "String"
+          when :bool
+            type = "Bool"
+          when :float
+            type = "Float64"
           when :begin_array
             type = "Array(T)"
           when :begin_object
             type = "T"
+          when :null
+            type = "Nil"
           else
             raise "Unsupported property type: #{parser.kind}"
           end

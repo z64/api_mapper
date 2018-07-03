@@ -29,7 +29,10 @@ module APIMapper
         "foo": 1,
         "bar": "bar",
         "array": [1, 2, 3],
-        "object": {"foo": "bar"}
+        "object": {"foo": "bar"},
+        "bool": true,
+        "float": 0.6,
+        "null": null
       }
       JSON
       template = ObjectTemplate.from_json(json, "Foo")
@@ -48,6 +51,15 @@ module APIMapper
 
         @[JSON::Field(key: "object")]
         property object : T # => {"foo":"bar"}
+
+        @[JSON::Field(key: "bool")]
+        property bool : Bool # => true
+
+        @[JSON::Field(key: "float")]
+        property float : Float64 # => 0.6
+
+        @[JSON::Field(key: "null")]
+        property null : Nil # => null
       end
 
       DOC
