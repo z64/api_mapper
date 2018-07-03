@@ -13,43 +13,47 @@ At the moment, something like this should work:
 ```crystal
 require "api_mapper"
 
-# Get a response from somewhere
-response = HTTP::Client.get("https://some-service/api/resource/1")
+class_name = ARGV[0]
+filename = ARGV[1]?
 
-File.open("resource.cr") do |io|
-  template = APIMapper::ObjectTemplate.from_json(response.body, "Resource")
-  template.to_s(io)
-end
+io = if filename
+       File.open(filename, "w")
+     else
+       STDOUT
+     end
+
+template = APIMapper::ObjectTemplate.from_json(STDIN, class_name)
+template.to_s(io)
+
+io.close if io.is_a?(File)
 ```
 
-Imagining the response is something like:
+Let's try [httpbin.org's GET](https://httpbin.org/#/HTTP_Methods/get_get):
 
-```json
-{
-  "foo": 1,
-  "bar": "bar",
-  "array": [1, 2, 3],
-  "object": {"foo": "bar"}
-}
+```
+curl \
+  -X GET "https://httpbin.org/get?foo=bar" \
+  -H "accept: application/json"\
+  | ./test Response
 ```
 
-`resource.cr` will now contain:
+We'll get on STDOUT:
 
 ```crystal
-struct Resource
+struct Response
   include JSON::Serializable
 
-  @[JSON::Field(key: "foo")]
-  property foo : Int64 # => 1
+  @[JSON::Field(key: "args")]
+  property args : T # => {"foo":"bar"}
 
-  @[JSON::Field(key: "bar")]
-  property bar : String # => "bar"
+  @[JSON::Field(key: "headers")]
+  property headers : T # => {"Accept":"application/json","Connection":"close","Host":"httpbin.org","User-Agent":"curl/7.60.0"}
 
-  @[JSON::Field(key: "array")]
-  property array : Array(T) # => [1,2,3]
+  @[JSON::Field(key: "origin")]
+  property origin : String # => "12.34.456.789"
 
-  @[JSON::Field(key: "object")]
-  property object : T # => {"foo":"bar"}
+  @[JSON::Field(key: "url")]
+  property url : String # => "https://httpbin.org/get?foo=bar"
 end
 ```
 
