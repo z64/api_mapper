@@ -57,6 +57,8 @@ struct Response
 end
 ```
 
+- See [other examples](https://gist.github.com/z64/cdde1e054f83046b2dc67f24daea2030) from [Discord's API](https://discordapp.com/developers/docs/intro)
+
 - The raw value of that key is written in a comment following the property, so
   that you can review it afterwards and maybe change it to a more accurate type.
 
